@@ -9,28 +9,49 @@ import {
     InputGroup,
     InputRightElement,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { useStateContext } from "../contexts/ContextProvider";
+import axiosClient from "../../axios-client";
 
-const Signup = () => {
-    const [data, setData] = useState({
-        email: "",
-        password: "",
-        rememberMe: false,
-    });
+const Login = () => {
+    const emailRef = useRef();
+    const passwordRef = useRef();
+    const rememberMeRef = useRef();
+    const [errors, setErrors] = useState(null);
+    const { setUser, setToken } = useStateContext();
 
     const [error, setError] = useState("");
-
-    const handleChange = ({ currentTarget: input }) => {
-        setData({ ...data, [input.name]: input.value });
-    };
 
     const [show, setShow] = React.useState(false);
     const handleClick = () => setShow(!show);
 
     const onSubmit = (ev) => {
         ev.preventDefault();
+        const payLoad = {
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        };
+        setErrors(null);
+        axiosClient
+            .post("/login", payLoad)
+            .then(({ data }) => {
+                setUser(data.user);
+                setToken(data.token);
+            })
+            .catch((err) => {
+                const response = err.response;
+                if (response && response.status === 422) {
+                    if (response.data.errors) {
+                        setErrors(response.data.errors);
+                    } else {
+                        setErrors({
+                            email: [response.data.message],
+                        });
+                    }
+                }
+            });
     };
 
     return (
@@ -50,6 +71,13 @@ const Signup = () => {
                         <Heading mb={6} mx={"auto"}>
                             Log in
                         </Heading>
+                        {errors && (
+                            <div>
+                                {Object.keys(errors).map((key) => (
+                                    <p key={key}>{errors[key][0]}</p>
+                                ))}
+                            </div>
+                        )}
                         <FormControl>
                             <Input
                                 id="email"
@@ -58,8 +86,7 @@ const Signup = () => {
                                 variant="filled"
                                 mb={3}
                                 type="email"
-                                onChange={handleChange}
-                                value={data.email}
+                                ref={emailRef}
                             />
                         </FormControl>
 
@@ -72,8 +99,7 @@ const Signup = () => {
                                     variant={"filled"}
                                     mb={3}
                                     type={show ? "text" : "password"}
-                                    onChange={handleChange}
-                                    value={data.password}
+                                    ref={passwordRef}
                                 />
                                 <InputRightElement width="3rem">
                                     <Button
@@ -92,8 +118,7 @@ const Signup = () => {
                             id="rememberMe"
                             name="rememberMe"
                             colorScheme="teal"
-                            onChange={handleChange}
-                            value={data.rememberMe}
+                            ref={rememberMeRef}
                         >
                             Remember me?
                         </Checkbox>
@@ -114,4 +139,4 @@ const Signup = () => {
     );
 };
 
-export default Signup;
+export default Login;

@@ -15,8 +15,8 @@ import axiosClient from "../../axios-client";
 import { useStateContext } from "../contexts/ContextProvider";
 
 const Signup = () => {
-    const fnameRef = useRef();
-    const lnameRef = useRef();
+    const first_nameRef = useRef();
+    const last_nameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmationRef = useRef();
@@ -33,8 +33,8 @@ const Signup = () => {
     const onSubmit = (ev) => {
         ev.preventDefault();
         const payLoad = {
-            fname: fnameRef.current.value,
-            lname: lnameRef.current.value,
+            first_name: first_nameRef.current.value,
+            last_name: last_nameRef.current.value,
             email: emailRef.current.value,
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
@@ -80,24 +80,24 @@ const Signup = () => {
                         )}
                         <FormControl>
                             <Input
-                                id="fname"
-                                name="fname"
+                                id="first_name"
+                                name="first_name"
                                 placeholder="First Name"
                                 variant="filled"
                                 mb={3}
                                 type="text"
-                                ref={fnameRef}
+                                ref={first_nameRef}
                             />
                         </FormControl>
                         <FormControl>
                             <Input
-                                id="lname"
-                                name="lname"
+                                id="last_name"
+                                name="last_name"
                                 placeholder="Last Name"
                                 variant="filled"
                                 mb={3}
                                 type="text"
-                                ref={lnameRef}
+                                ref={last_nameRef}
                             />
                         </FormControl>
                         <FormControl>
