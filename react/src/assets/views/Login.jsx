@@ -8,6 +8,8 @@ import {
     Checkbox,
     InputGroup,
     InputRightElement,
+    Alert,
+    AlertIcon,
 } from "@chakra-ui/react";
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
@@ -21,8 +23,6 @@ const Login = () => {
     const rememberMeRef = useRef();
     const [errors, setErrors] = useState(null);
     const { setUser, setToken } = useStateContext();
-
-    const [error, setError] = useState("");
 
     const [show, setShow] = React.useState(false);
     const handleClick = () => setShow(!show);
@@ -72,11 +72,12 @@ const Login = () => {
                             Log in
                         </Heading>
                         {errors && (
-                            <div>
+                            <Alert status="error" variant="top-accent">
+                                <AlertIcon />
                                 {Object.keys(errors).map((key) => (
                                     <p key={key}>{errors[key][0]}</p>
                                 ))}
-                            </div>
+                            </Alert>
                         )}
                         <FormControl>
                             <Input

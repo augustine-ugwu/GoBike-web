@@ -22,7 +22,7 @@ const PickupTime = () => {
                     p={2}
                     maxW={"sm"}
                 >
-                    <Link to="/">
+                    <Link to="/homepage">
                         <ArrowBackIcon ml={2} mt={2} fontSize={18} />
                     </Link>
                     <Heading fontSize="2em" px={6} pt={2} mb={6}>

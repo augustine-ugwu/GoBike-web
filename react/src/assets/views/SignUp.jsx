@@ -7,16 +7,19 @@ import {
     Text,
     InputGroup,
     InputRightElement,
+    Alert,
+    AlertIcon,
 } from "@chakra-ui/react";
 import React, { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import axiosClient from "../../axios-client";
 import { useStateContext } from "../contexts/ContextProvider";
+import { useToast } from "@chakra-ui/react";
 
 const Signup = () => {
-    const first_nameRef = useRef();
-    const last_nameRef = useRef();
+    const nameRef = useRef();
+    const usernameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const passwordConfirmationRef = useRef();
@@ -33,8 +36,8 @@ const Signup = () => {
     const onSubmit = (ev) => {
         ev.preventDefault();
         const payLoad = {
-            first_name: first_nameRef.current.value,
-            last_name: last_nameRef.current.value,
+            name: nameRef.current.value,
+            username: usernameRef.current.value,
             email: emailRef.current.value,
             password: passwordRef.current.value,
             password_confirmation: passwordConfirmationRef.current.value,
@@ -54,6 +57,9 @@ const Signup = () => {
             });
     };
 
+    const toast = useToast();
+    const positions = ["top"];
+
     return (
         <>
             <form onSubmit={onSubmit}>
@@ -72,32 +78,33 @@ const Signup = () => {
                             Create Account
                         </Heading>
                         {errors && (
-                            <div>
+                            <Alert status="error" variant="top-accent">
+                                <AlertIcon />
                                 {Object.keys(errors).map((key) => (
                                     <p key={key}>{errors[key][0]}</p>
                                 ))}
-                            </div>
+                            </Alert>
                         )}
                         <FormControl>
                             <Input
-                                id="first_name"
-                                name="first_name"
-                                placeholder="First Name"
+                                id="name"
+                                name="name"
+                                placeholder="Enter Your Name"
                                 variant="filled"
                                 mb={3}
                                 type="text"
-                                ref={first_nameRef}
+                                ref={nameRef}
                             />
                         </FormControl>
                         <FormControl>
                             <Input
-                                id="last_name"
-                                name="last_name"
-                                placeholder="Last Name"
+                                id="username"
+                                name="username"
+                                placeholder="Enter Username"
                                 variant="filled"
                                 mb={3}
                                 type="text"
-                                ref={last_nameRef}
+                                ref={usernameRef}
                             />
                         </FormControl>
                         <FormControl>
@@ -161,6 +168,17 @@ const Signup = () => {
                             mb={6}
                             colorScheme={"teal"}
                             onClick={onSubmit}
+                            // onClick={() =>
+                            //     toast({
+                            //         title: "Account created.",
+                            //         description:
+                            //             "We've created your account for you.",
+                            //         status: "success",
+                            //         position: position,
+                            //         duration: 9000,
+                            //         isClosable: true,
+                            //     })
+                            // }
                         >
                             Sign up
                         </Button>
